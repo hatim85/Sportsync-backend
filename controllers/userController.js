@@ -79,7 +79,7 @@ export const signout=(req,res,next)=>{
 }
 
 export const getUsers=async(req,res,next)=>{
-    if(!req.user.userType==='admin'){
+    if(!req.userType==='admin'){
         return next(errorHandler(403,'You are not allowed to see all user'))
     }
     try{

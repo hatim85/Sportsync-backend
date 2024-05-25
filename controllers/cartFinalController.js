@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 export const addToCart = async (req, res) => {
     let { productId } = req.params;
     const { userId } = req.body; // Assuming user ID is available in req.user after authentication
+    // console.log("prod id", productId)
     try {
         // Check if the product is already in the user's cart
         let cart = await Cart.findOne({ userId }).populate('cartItems').exec();

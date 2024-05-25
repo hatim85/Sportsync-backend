@@ -9,6 +9,7 @@ const router = express.Router();
 export const getProducts = async (req, res, next) => {
     try {
         const page = req.query.page || 1;
+        // console.log(page)
         const pageSize = 10;
         const skip = (page - 1) * pageSize;
 

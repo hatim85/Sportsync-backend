@@ -85,9 +85,33 @@ export const signup = async (req, res, next) => {
         phone
     });
 
+    // try {
+    //     await newUser.save();
+    //     res.json('Signup successfull');
+    // } catch (error) {
+    //     next(error);
+    // }
+
     try {
         await newUser.save();
-        res.json('Signup successfull');
+
+        // Create a JWT token
+        const token = jwt.sign(
+            { userId: newUser._id, email: newUser.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(201).json({
+            message: 'Signup successful',
+            token,
+            user: {
+                id: newUser._id,
+                username: newUser.username,
+                email: newUser.email,
+                phone: newUser.phone
+            }
+        });
     } catch (error) {
         next(error);
     }
