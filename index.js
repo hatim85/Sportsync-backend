@@ -52,6 +52,14 @@ app.use('/api/payment',paymentRoutes);
 app.use('/api/admin',adminRoutes);
 app.get('/api/getkey',(req,res)=>res.status(200).json({key:process.env.RAZORPAY_API_KEY}))
 
+// 404 middleware
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: 'Not Found',
+  });
+});
+
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Something went wrong";
