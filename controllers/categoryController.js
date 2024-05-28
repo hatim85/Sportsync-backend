@@ -31,33 +31,6 @@ export const getCategories = async (req, res, next) => {
     }
 }
 
-// Get a single category by its id
-export const getCategory = async (req, res, next) => {
-    try {
-        const category = await Category.findById(req.params.categoryId);
-        res.status(200).json(category);
-    } catch (err) {
-        next(err);
-    }
-}
-
-// Update a category
-export const updateCategory = async (req, res, next) => {
-    try {
-        const categoryId = req.params.categoryId;
-        const updatedCategory = await Category.findByIdAndUpdate(categoryId, { $set: req.body }, { new: true });
-        
-        if (!updatedCategory) {
-            return res.status(404).json({ message: `Category with ID ${categoryId} not found` });
-        }
-
-        res.status(200).json(updatedCategory);
-    } catch (err) {
-        console.error('Error updating category:', err);
-        next(err); // Pass the error to the error-handling middleware
-    }
-}
-
 // Delete a category
 export const deleteCategory = async (req, res, next) => {
     try {
@@ -89,7 +62,6 @@ export const updateimg=async(req,res)=>{
     const {categoryId}=req.params;
     const image=req.files;
     const imgs=image.map((item)=>item.filename)
-    console.log(imgs)
     try {
         const updatedImg=await Category.findByIdAndUpdate(categoryId,{image:imgs},{new:true});
         res.json(updatedImg)

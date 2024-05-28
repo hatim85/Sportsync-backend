@@ -68,7 +68,6 @@ export const paymentVerification = async (req, res) => {
         status: 'pending'
       });
       const savedOrder = await newOrder.save();
-      console.log(decodedCartItems)
         // for (let i = 0; i < decodedCartItems.length; i++) {
         //   const cartItem = decodedCartItems[i];
         //   const cart = await Cart.findById(cartItem.cartId);

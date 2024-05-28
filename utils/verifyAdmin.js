@@ -4,7 +4,6 @@ export const verifyAdmin=(req,res,next)=>{
         next();
     }
     else{
-        console.log('unauthorized',req.users)
         return res.status(403).json({message:'Unauthorized: Only Admins can perform this action'});
     }
 }

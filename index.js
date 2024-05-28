@@ -8,7 +8,6 @@ import authRoutes from './routes/authRoute.js'
 import categoryRoutes from './routes/categoryRoute.js'
 import productRoutes from './routes/productRoute.js'
 import cartRoutes from './routes/cartRoute.js'
-import cartItemRoutes from './routes/cartItemRoute.js'
 import orderRoutes from './routes/orderRoute.js'
 import paymentRoutes from './routes/paymentRoute.js'
 import adminRoutes from './routes/adminRoute.js'
@@ -48,7 +47,6 @@ app.use('/api/auth',authRoutes);
 app.use('/api/categories',categoryRoutes);
 app.use('/api/products',productRoutes);
 app.use('/api/cart',cartRoutes);
-app.use('/api/cartItem',cartItemRoutes);
 app.use('/api/orders',orderRoutes);
 app.use('/api/payment',paymentRoutes);
 app.use('/api/admin',adminRoutes);

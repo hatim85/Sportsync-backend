@@ -9,7 +9,6 @@ const router = express.Router();
 export const getProducts = async (req, res, next) => {
     try {
         const page = req.query.page || 1;
-        // console.log(page)
         const pageSize = 10;
         const skip = (page - 1) * pageSize;
 
@@ -23,43 +22,19 @@ export const getProducts = async (req, res, next) => {
     }
 };
 
-
-// export const getProduct = async (req, res, next) => {
-//     try {
-//         const product = await Product.findById(req.params.productId)
-//         const category=await Category.findById(product.id)
-//         console.log(category)
-//         // console.log(product.category.name)
-//         if (!product) {
-//             return res.status(404).json({ error: 'Product not found' });
-//         }
-//         // console.log(product.category.name)
-//         // const categoryName = product.category ? product.category.name : null;
-
-
-//         // console.log('Product category:', product.categoryName); 
-//         res.status(200).json(product);
-//     } catch (err) {
-//         next(err); // Pass the error to the error handling middleware
-//     }
-// };
-
 export const getProduct = async (req, res, next) => {
     try {
-        // Find the product by its ID and populate the 'category' field
         const product = await Product.findById(req.params.productId).populate('category');
 
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        // Access the category details
         const category = product.categoryName;
-        // console.log(product.category); // This should log the category details
 
         res.status(200).json(product);
     } catch (err) {
-        next(err); // Pass the error to the error handling middleware
+        next(err); 
     }
 };
 
@@ -97,22 +72,6 @@ export const createProduct = async (req, res, next) => {
         res.status(201).json(savedProduct);
     } catch (err) {
         next(err);
-    }
-}
-
-export const getProductByName = async (req, res, next) => {
-    try {
-        const { productName } = req.params;
-
-        const product = await Product.findOne({ name: productName });
-
-        if (!product) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-
-        res.status(200).json({ product });
-    } catch (error) {
-        next(error);
     }
 }
 
@@ -213,30 +172,8 @@ export const getProductsByCategory = async (req, res) => {
     }
 };
 
-export const getCategoryByProduct = async (req, res) => {
-    try {
-        const productId = req.params.productId;
-
-        const product = await Product.findById(productId).populate('category');
-
-        if (!product) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-        // const categoryName = product.category ? product.category.name : null;
-        const categoryName = await Category.findById(product.categoryId);
-        console.log(typeof (categoryName))
-
-
-        res.status(200).json({ categoryName });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-};
-
 export const search = async (req, res) => {
     const query = req.params.q;
-    // console.log(query)
     try {
         if (!query || typeof query !== 'string') {
             throw new Error('Invalid search query');
@@ -257,7 +194,6 @@ export const similarProduct = async (req, res) => {
     try {
         const currentProduct = await Product.findById(req.params.productId);
         const similarProducts = await Product.find({ category: currentProduct.category, _id: { $ne: currentProduct._id } }).limit(7); // Limiting to 4 similar products
-        console.log(typeof (similarProducts))
         res.json(similarProducts);
     } catch (err) {
         console.error(err.message);
@@ -270,7 +206,6 @@ export const updateImages = async (req, res) => {
     const images = req.files;
 
     const imgs = images?.map(item => item.filename)
-    console.log(imgs)
 
     try {
         const updatedImage = await Product.findByIdAndUpdate(productId, { image: imgs }, { new: true });
