@@ -31,6 +31,18 @@ export const getCategories = async (req, res, next) => {
     }
 }
 
+export const getAllCategories = async (req, res, next) => {
+    try {
+        // Fetch all categories, projecting only necessary fields
+        const categories = await Category.find({}, '_id name image').exec();
+
+        res.status(200).json(categories);
+    } catch (err) {
+        console.error('Error fetching categories:', err);
+        res.status(500).json({ error: 'Failed to fetch categories' });
+    }
+}
+
 // Delete a category
 export const deleteCategory = async (req, res, next) => {
     try {
@@ -70,22 +82,22 @@ export const updateimg=async(req,res)=>{
     }
 }
 
-export const getzeroindeximg=async(req,res)=>{
+export const getzeroindeximg = async (req, res) => {
     try {
-        const categories = await Category.find();
-    
-        const zerothIndexImages = categories.map(category => ({
-          categoryId: category._id,
-          image: category.image[0] 
-        }));
-    
-        res.json(zerothIndexImages);
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to fetch zeroth index images from categories' });
-      }
-}
-
+      const categories = await Category.find({}, { _id: 1, image: { $slice: 1 } }); // Only retrieve the first image and category ID
+      
+      const zerothIndexImages = categories.map(category => ({
+        categoryId: category._id,
+        image: category.image[0]
+      }));
+  
+      res.json(zerothIndexImages);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to fetch zeroth index images from categories' });
+    }
+  };
+  
 
 //not required as it is done in products differently
 // // Create a new product within a category
