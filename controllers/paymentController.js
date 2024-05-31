@@ -91,7 +91,6 @@ export const paymentVerification = async (req, res) => {
           console.log("Failed to delete cart")
         }
 
-      // res.redirect(`http://localhost:5173/paymentsuccess?reference=${razorpay_payment_id}`);
       res.redirect(`${process.env.CLIENT}/paymentsuccess`);
     }
     catch (error) {

@@ -6,6 +6,7 @@ const addressSchema = new mongoose.Schema({
     addressLine1: { type: String, required: true },
     addressLine2: { type: String },
     city: { type: String, required: true },
+    country: { type: String, required: true },
     postalCode: { type: String, required: true },
     phoneNumber: { type: String, required: true },
     isDefault: { type: Boolean, default: false } // Indicates if this address is the user's default address

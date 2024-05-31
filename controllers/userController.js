@@ -48,7 +48,7 @@ export const getUsers=async(req,res,next)=>{
 export const addAddress=async(req,res)=>{
     try {
         const {userId}=req.params;
-        const {  fullName, addressLine1, addressLine2, city, postalCode, phoneNumber, isDefault } = req.body;
+        const {  fullName,country, addressLine1, addressLine2, city, postalCode, phoneNumber, isDefault } = req.body;
 
         // Create a new address object
         const newAddress = new Address({
@@ -57,12 +57,12 @@ export const addAddress=async(req,res)=>{
             addressLine1,
             addressLine2,
             city,
+            country,
             postalCode,
             phoneNumber,
             isDefault
         });
 
-        // Save the new address to the database
         await newAddress.save();
 
         res.status(201).json({ message: 'Address added successfully', address: newAddress });
@@ -76,15 +76,12 @@ export const getUserAddresses = async (req, res) => {
     const userId = req.params.userId;
 
     try {
-        // Find addresses associated with the user ID
         const addresses = await Address.find({ userId });
 
-        // Check if addresses were found
         if (!addresses) {
             return res.status(404).json({ message: 'Addresses not found for the user' });
         }
 
-        // Return the addresses
         res.status(200).json(addresses);
     } catch (error) {
         console.error('Error fetching addresses:', error);
