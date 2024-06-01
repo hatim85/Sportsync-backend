@@ -80,16 +80,32 @@ export const paymentVerification = async (req, res) => {
         //     await cartItem.save();
         //   }
         // }
+
         if (savedOrder && decodedCartItems.length > 0) {
-          await Cart.findOneAndUpdate(
-            { userId: userId },
-            { $pull: { cartItems: { $in: decodedCartItems } } },
-            { new: true }
-          );
+          const cart = await Cart.findOne({ userId: userId });
+  
+          if (cart) {
+            for (const item of decodedCartItems) {
+              await CartItem.findByIdAndDelete(item._id);
+            }
+  
+            cart.cartItems.pull(...decodedCartItems.map(item => item._id));
+            await cart.save();
+          }
+        } else {
+          console.log("Failed to delete cart items");
         }
-        else {
-          console.log("Failed to delete cart")
-        }
+        
+        // if (savedOrder && decodedCartItems.length > 0) {
+        //   await Cart.findOneAndUpdate(
+        //     { userId: userId },
+        //     { $pull: { cartItems: { $in: decodedCartItems } } },
+        //     { new: true }
+        //   );
+        // }
+        // else {
+        //   console.log("Failed to delete cart")
+        // }
 
       res.redirect(`${process.env.CLIENT}/paymentsuccess`);
     }

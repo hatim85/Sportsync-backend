@@ -1,6 +1,5 @@
 import express from 'express'
 import { getAllAdminOrders, getAllOrders, updateStatus } from '../controllers/orderController.js';
-import User from '../models/userModel.js';
 
 const router=express.Router();
 

@@ -10,7 +10,6 @@ router.put('/update/:cartItemId',updateCartItemQuantity);
 router.delete('/delete/:cartItemId',removeFromCart);
 router.post('/addToCart/:productId',addToCart)
 router.delete('/remove/:cartItemId',removeFromCart)
-router.put('/updateqty/:cartItemId',updateCartItemQuantity)
 router.put('/update/:id',updateCartItem);
 router.delete('/delete/:id',deleteCartItem);
 
