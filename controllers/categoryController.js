@@ -35,6 +35,8 @@ export const getAllCategories = async (req, res, next) => {
     try {
         // Fetch all categories, projecting only necessary fields
         const categories = await Category.find({}, '_id name image').exec();
+        // const exec = await Category.find({}, '_id name image').explain('executionStats');
+        // console.log(exec)
 
         res.status(200).json(categories);
     } catch (err) {
@@ -85,7 +87,8 @@ export const updateimg=async(req,res)=>{
 export const getzeroindeximg = async (req, res) => {
     try {
       const categories = await Category.find({}, { _id: 1, image: { $slice: 1 } }); // Only retrieve the first image and category ID
-      
+    //   const execStats = await Category.find({}, { _id: 1, image: { $slice: 1 } }).explain('executionStats'); 
+    //   console.log(execStats)
       const zerothIndexImages = categories.map(category => ({
         categoryId: category._id,
         image: category.image[0]
