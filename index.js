@@ -46,7 +46,7 @@ export const instance = new Razorpay({
 // Set up static file serving
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
+console.log(__dirname)
 app.use(express.static(join(__dirname, 'client', 'dist')));
 
 app.get('/', (req, res) => {

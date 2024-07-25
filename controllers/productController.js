@@ -12,11 +12,11 @@ export const getProducts = async (req, res, next) => {
         const pageSize = 10;
         const skip = (page - 1) * pageSize;
 
-        console.log("started")
+        // console.log("started")
         const products = await Product.find()
             .skip(skip)
             .limit(pageSize);
-        console.log("ended")
+        // console.log("ended")
         // const exec = await Product.find()
         //     .skip(skip)
         //     .limit(pageSize)

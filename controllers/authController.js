@@ -63,16 +63,16 @@
 // }
 
 
-    
+
 import User from '../models/userModel.js'
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken'
 
 export const signup = async (req, res, next) => {
-    const { username, email, password,phone } = req.body;
+    const { username, email, password, phone } = req.body;
 
-    if (!username || !email || !password || !phone || username === '' || email === '' || password === '' || phone==='') {
+    if (!username || !email || !password || !phone || username === '' || email === '' || password === '' || phone === '') {
         next(errorHandler(400, 'All fields are required'));
     }
 
@@ -110,11 +110,12 @@ export const signup = async (req, res, next) => {
 }
 
 export const signin = async (req, res, next) => {
+    console.log(req.body)
     const { email, password } = req.body;
 
-    if (!email || !password || email === "" || password === "") {
-        return next(errorHandler(400, 'All fields are required'));
-    }
+    // if (!email || !password || email === "" || password === "") {
+    //     return next(errorHandler(400, 'All fields are required'));
+    // }
 
     try {
         const validUser = await User.findOne({ email });
