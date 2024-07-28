@@ -34,11 +34,18 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-const serviceAccount=JSON.parse(
-  await readFile(
-    new URL('./firebase-adminsdk.json',import.meta.url)
-  )
-)
+//for local
+// const serviceAccount=JSON.parse(
+//   await readFile(
+//     new URL('./firebase-adminsdk.json',import.meta.url)
+//   )
+// )
+
+//for hosted version
+const firebaseAdminSdkBase64 = process.env.FIREBASE_ADMINSDK_BASE64;
+const firebaseAdminSdkJson = Buffer.from(firebaseAdminSdkBase64, 'base64').toString('utf-8');
+const serviceAccount = JSON.parse(firebaseAdminSdkJson);
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });

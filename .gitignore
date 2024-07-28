@@ -5,6 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 
 firebase-adminsdk.json
+firebase-adminsdk.base64
 
 # Logs
 logs/
