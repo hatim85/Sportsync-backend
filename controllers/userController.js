@@ -2,17 +2,34 @@ import bcryptjs from 'bcryptjs'
 import { errorHandler } from '../utils/error.js'
 import User from '../models/userModel.js'
 import Address from '../models/addressModel.js'
+import admin from 'firebase-admin'
 
+export const deleteUser = async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        console.log(userId)
+        const user = await User.findById(userId);
+        console.log(user.firebaseUid)
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
 
-export const deleteUser=async(req,res,next)=>{
-    try{
-        await User.findByIdAndDelete(req.params.userId);
-        res.status(200).json('User has been deleted');
-    }
-    catch(error){
+        if (user.firebaseUid) {
+            try {
+                await admin.auth().deleteUser(user.firebaseUid);
+                console.log(`Firebase user with UID ${user.firebaseUid} deleted successfully.`);
+            } catch (firebaseError) {
+                console.error('Error deleting user from Firebase:', firebaseError);
+                return res.status(500).json({ success: false, message: 'Error deleting user from Firebase' });
+            }
+        }
+
+        await User.findByIdAndDelete(userId);
+        res.status(200).json({ success: true, message: 'User has been deleted' });
+    } catch (error) {
         next(error);
     }
-}
+};
 
 export const signout=(req,res,next)=>{
     try {
@@ -25,32 +42,34 @@ export const signout=(req,res,next)=>{
     }
 }
 
-export const getUsers=async(req,res,next)=>{
-    if(!req.userType==='admin'){
-        return next(errorHandler(403,'You are not allowed to see all user'))
-    }
-    try{
-        const page = req.query.page || 1;
-        const pageSize = 10; 
-        const skip = (page - 1) * pageSize;
+export const getUsers = async (req, res, next) => {
+    // if (req.userType !== 'admin') {
+    //   return next(errorHandler(403, 'You are not allowed to see all users'));
+    // }
+    try {
+      const page = req.query.page || 1;
+      const pageSize = 10;
+      const skip = (page - 1) * pageSize;
   
-        const users = await User.find()
-            .skip(skip)
-            .limit(pageSize);
+      let users = await User.find().skip(skip).limit(pageSize);
   
-        res.status(200).json(users);
+      // Ensure users is always an array
+    //   if (typeof(users)==Object) {
+    //     users = [users];
+    // }
+    console.log(typeof(users))
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    catch(error){
-      res.status(500).json({message:error.message})
-    }
-}
+  };
+
 
 export const addAddress=async(req,res)=>{
     try {
         const {userId}=req.params;
         const {  fullName,country, addressLine1, addressLine2, city, postalCode, phoneNumber, isDefault } = req.body;
 
-        // Create a new address object
         const newAddress = new Address({
             userId,
             fullName,

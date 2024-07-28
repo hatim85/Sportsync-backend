@@ -90,10 +90,8 @@ export const updateProduct = async (req, res, next) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Destructure fields to update
         const { name, description, price, categoryId } = req.body;
 
-        // Check if the category ID is provided and different from the current one
         if (categoryId) {
             const newCategory = await Category.findById(categoryId);
 
@@ -103,7 +101,6 @@ export const updateProduct = async (req, res, next) => {
         }
 
         if (categoryId && categoryId !== product.category) {
-            // Remove product ID from the old category's products array
             const newCategory = await Category.findById(categoryId);
             const oldCategory = await Category.findById(product.category);
 
@@ -117,7 +114,6 @@ export const updateProduct = async (req, res, next) => {
             await newCategory.save();
         }
 
-        // Update other fields if provided
         if (name) product.name = name;
         if (description) product.description = description;
         if (price) product.price = price;
@@ -126,7 +122,6 @@ export const updateProduct = async (req, res, next) => {
             product.image.push(req.file.filename)
         }
 
-        // if (image) product.image=image
 
         const updatedProduct = await product.save();
 
@@ -159,7 +154,6 @@ export const deleteProduct = async (req, res, next) => {
             await category.save();
         }
 
-        // Remove the product document
         await Product.deleteOne({ _id: req.params.productId });
         res.status(200).json({ message: 'Product deleted' });
     } catch (err) {

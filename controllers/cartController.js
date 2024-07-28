@@ -69,48 +69,28 @@ export const deleteCartItem=async(req,res)=>{
 
 export const addToCart = async (req, res) => {
     let { productId } = req.params;
-    const { userId } = req.body; // Assuming user ID is available in req.user after authentication
-    // console.log("Product ID:", productId);
+    const { userId } = req.body; 
 
     try {
-        // Check if the product is already in the user's cart
         let cart = await Cart.findOne({ userId }).populate('cartItems').exec();
-        // console.log("Existing Cart:", cart);
 
         if (!cart) {
-            // console.log("Cart not found, creating a new one");
             cart = await Cart.create({ userId, cartItems: [] });
-            // console.log("New Cart:", cart);
         }
 
         productId = String(productId);
         let cartItem = await CartItem.findOne({ cartId: cart._id, productId }).exec();
 
         if (cartItem) {
-            // console.log("Existing Cart Item found:", cartItem);
             cartItem.quantity++;
-            // console.log("After incrementing quantity, cartItem:", cartItem);
             await cartItem.save();
-            // console.log('cartItems array inside the quantity ++', cart.cartItems)
-            // cart.cartItems.push(cartItem._id)
-            // console.log('cartItems array after pushing', cart.cartItems)
-
-            // await cart.save();
         } else {
-            // console.log("No existing Cart Item found, creating a new one");
             cartItem = await CartItem.create({ cartId: cart._id, productId });
-            // console.log("New Cart Item created:", cartItem);
-
             cart.cartItems.push(cartItem._id);
-            // console.log("After adding new item, cartItems:", cart.cartItems);
-
             await cart.save();
-            // console.log("Cart after saving new item:", cart);
         }
 
-        // Re-fetch the cart to ensure it includes all the cartItems
         cart = await Cart.findOne({ userId }).populate('cartItems').exec();
-        // console.log("Updated Cart:", cart);
         res.json(cartItem);
     } catch (error) {
         console.error('Error adding product to cart:', error);

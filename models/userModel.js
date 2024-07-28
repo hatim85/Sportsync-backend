@@ -1,20 +1,17 @@
 import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema({
-    firebaseUid: { type: String, required: true, unique: true },
+    firebaseUid: { type: String, unique: true },
     username: {
         type: String,
-        required: true,
         maxLength: 50
     },
     password: {
         type: String,
-        required: true,
         maxLength: 255
     },
     email: {
         type: String,
-        required: true,
         unique: true,
         maxLength: 100
     },
@@ -24,8 +21,7 @@ const userSchema = mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
-        maxLength: 10
+        maxLength: 13
     },
     userType: {
         type: String,
