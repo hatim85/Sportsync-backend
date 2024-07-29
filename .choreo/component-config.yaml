@@ -1,0 +1,16 @@
+name: Sportsync-backend
+componentType: SERVICE
+source:
+  type: GIT
+  repository: https://github.com/hatim85/Sportsync-backend
+  branch: main
+  context: /
+dockerfile: Dockerfile
+expose:
+  type: HTTP
+  port: 3000
+environmentVariables:
+  - name: NODE_ENV
+    value: production
+  - name: PORT
+    value: 3000
