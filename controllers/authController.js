@@ -96,6 +96,7 @@ export const firebaseSignin = async (req, res) => {
         let user = await User.findOne({ firebaseUid });
 
         if (!user) {
+            console.log("entered not user")
             user = new User({
                 firebaseUid,
                 username,

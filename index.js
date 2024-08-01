@@ -42,7 +42,7 @@ app.use(cors());
 // )
 
 //for hosted version
-const firebaseAdminSdkBase64 = process.env.FIREBASE_ADMINSDK_BASE64;
+const firebaseAdminSdkBase64 =process.env.FIREBASE_ADMINSDK_BASE64;
 const firebaseAdminSdkJson = Buffer.from(firebaseAdminSdkBase64, 'base64').toString('utf-8');
 const serviceAccount = JSON.parse(firebaseAdminSdkJson);
 
