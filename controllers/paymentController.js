@@ -56,7 +56,7 @@ export const paymentVerification = async (req, res) => {
         return res.status(404).json({ success: false, message: 'Payment not found' })
       }
       const { userId, totalAmount, products, cartItems } = req.query;
-
+      console.log("userId: ",userId," totalAmount: ",totalAmount," products: ",products," cartItems: ",cartItems)
       const decodedProducts = JSON.parse(decodeURIComponent(products));
       const decodedCartItems = JSON.parse(decodeURIComponent(cartItems))
       const newOrder = new Order({
@@ -67,6 +67,7 @@ export const paymentVerification = async (req, res) => {
         orderDate: new Date(),
         status: 'pending'
       });
+      console.log(newOrder)
       const savedOrder = await newOrder.save();
         // for (let i = 0; i < decodedCartItems.length; i++) {
         //   const cartItem = decodedCartItems[i];
@@ -81,20 +82,21 @@ export const paymentVerification = async (req, res) => {
         //   }
         // }
 
-        if (savedOrder && decodedCartItems.length > 0) {
-          const cart = await Cart.findOne({ userId: userId });
+        // if (savedOrder && decodedCartItems.length > 0) {
+        //   const cart = await Cart.findOne({ userId: userId });
+          
+        //   if (cart) {
+        //     for (const item of decodedCartItems) {
+        //       await CartItem.findByIdAndDelete(item._id);
+        //     }
   
-          if (cart) {
-            for (const item of decodedCartItems) {
-              await CartItem.findByIdAndDelete(item._id);
-            }
-  
-            cart.cartItems.pull(...decodedCartItems.map(item => item._id));
-            await cart.save();
-          }
-        } else {
-          console.log("Failed to delete cart items");
-        }
+        //     cart.cartItems.pull(...decodedCartItems.map(item => item._id));
+        //     await cart.save();
+        //     console.log(cart)
+        //   }
+        // } else {
+        //   console.log("Failed to delete cart items");
+        // }
         
         // if (savedOrder && decodedCartItems.length > 0) {
         //   await Cart.findOneAndUpdate(

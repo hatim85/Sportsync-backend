@@ -15,9 +15,9 @@ const userSchema = mongoose.Schema({
         unique: true,
         maxLength: 100
     },
-    address: {
-        type: String,
-        maxLength: 255
+    addressId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Address'
     },
     phone: {
         type: String,
